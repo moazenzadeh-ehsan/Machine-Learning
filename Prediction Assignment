@@ -29,6 +29,7 @@ So, as I couldn’t have an estimate of the correlations, I considered “pca”
 as a probable candidate for pre-Processing 
 _next, I checked for the variables with near zero variance
 >nsv<-nearZeroVar(training,saveMetrics=TRUE) 
+>nsv
 _60 near zero variables!!! 
 
 5_Covariate creation:
