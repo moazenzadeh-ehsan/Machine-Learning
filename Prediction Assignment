@@ -8,7 +8,7 @@ My first machine learning manuscript by: Ehsan Moazen Zadeh
 3_I read data to R for training and testing
 >training<-read.csv("pml-training.csv")
 >testing<-read.csv("pml-testing.csv")
-3_Exploratory data analysis:
+4_Exploratory data analysis:
 _First, I wanted to have an overall view of the data
 >dim(training)
 >colnames(training)
@@ -28,7 +28,7 @@ _next, I checked for the variables with near zero variance
 >nsv<-nearZeroVar(training,saveMetrics=TRUE)
 _60 near zero variables!!! 
 
-4_Covariate creation:
+5_Covariate creation:
 _I tried many ways of coding to exclude the near zero variables from the training set, including “for” loop, “apply”, “rep”. but none of them worked perfectly as I am naïve in coding. Finally I came up with this code:
 >for (i in 1:160){
     x<-nsv[i,4]
