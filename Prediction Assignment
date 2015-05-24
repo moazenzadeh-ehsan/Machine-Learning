@@ -7,11 +7,14 @@ My first machine learning manuscript by: Ehsan Moazen Zadeh
 >set.seed(1221)
 3_I read data to R for training and testing
 >training<-read.csv("pml-training.csv")
+
 >testing<-read.csv("pml-testing.csv")
 4_Exploratory data analysis:
 _First, I wanted to have an overall view of the data
 >dim(training)
+
 >colnames(training)
+
 >summary(training)
 _ “summary” code did not help that much as there were 160 variables
 _I skipped plotting the data for the same reason of many variables
@@ -31,11 +34,17 @@ _60 near zero variables!!!
 5_Covariate creation:
 _I tried many ways of coding to exclude the near zero variables from the training set, including “for” loop, “apply”, “rep”. but none of them worked perfectly as I am naïve in coding. Finally I came up with this code:
 >for (i in 1:160){
+
     x<-nsv[i,4]
+
     if (x=="TRUE"){
+
         training<-training[,-i]
+
         nsv<-nsv[-i,]
+
     }
+
 }
 _each time that I ran the code above, it reduced the number of variables with near zero variance but produced an error in the midway and did not exclude them completely; however, it would omit all the 60 near zero variables after 4 times of repeating the code! So, I wrote the code 4 times consecutively for now.( I may find a better way to omit the 60 near zeroes in future.) At the end, I checked for the results:
 >dim(training)
