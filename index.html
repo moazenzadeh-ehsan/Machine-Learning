@@ -39,8 +39,9 @@
 <p>3_I read data to R for training and testing</p>
 
 <blockquote>
-<p>training&lt;-read.csv("pml-training.csv")
-testing&lt;-read.csv("pml-testing.csv")</p>
+<p>training&lt;-read.csv("pml-training.csv")</p>
+
+<p>testing&lt;-read.csv("pml-testing.csv")</p>
 </blockquote>
 
 <p>3_Exploratory data analysis:</p>
@@ -48,9 +49,11 @@ testing&lt;-read.csv("pml-testing.csv")</p>
 <p>_First, I wanted to have an overall view of the data</p>
 
 <blockquote>
-<p>dim(training)
-colnames(training)
-summary(training)</p>
+<p>dim(training)</p>
+
+<p>colnames(training)</p>
+
+<p>summary(training)</p>
 </blockquote>
 
 <p>_ “summary” code did not help that much as there were 160 variables</p>
@@ -80,6 +83,8 @@ as a probable candidate for pre-Processing</p>
 
 <blockquote>
 <p>nsv&lt;-nearZeroVar(training,saveMetrics=TRUE)</p>
+
+<p>nsv</p>
 </blockquote>
 
 <p>_60 near zero variables!!!</p>
@@ -89,20 +94,28 @@ as a probable candidate for pre-Processing</p>
 <p>_I tried many ways of coding to exclude the near zero variables from the training set, including “for” loop, “apply”, “rep”. but none of them worked perfectly as I am naïve in coding. Finally I came up with this code:</p>
 
 <blockquote>
-<p>for (i in 1:160){
-    x&lt;-nsv[i,4]
-    if (x=="TRUE"){
-        training&lt;-training[,-i]
-        nsv&lt;-nsv[-i,]
-    }
-}</p>
+<p>for (i in 1:160){</p>
 </blockquote>
+
+<pre><code>x&lt;-nsv[i,4]
+
+if (x=="TRUE"){
+
+    training&lt;-training[,-i]
+
+    nsv&lt;-nsv[-i,]
+
+}
+</code></pre>
+
+<p>}</p>
 
 <p>_each time that I ran the code above, it reduced the number of variables with near zero variance but produced an error in the midway and did not exclude them completely; however, it would omit all the 60 near zero variables after 4 times of repeating the code! So, I wrote the code 4 times consecutively for now.( I may find a better way to omit the 60 near zeroes in future.) At the end, I checked for the results:</p>
 
 <blockquote>
-<p>dim(training)
-dim(nsv)</p>
+<p>dim(training)</p>
+
+<p>dim(nsv)</p>
 </blockquote>
 
 <p>_my options for pre-Processing were “knnImpute”, ”pca”, “center”, “scale” up to this step. I think all of them were needed if I would choose a regression model rather than a non-parametric tree</p>
@@ -121,9 +134,11 @@ dim(nsv)</p>
 <p>_also, there was no real need for that much pre-Processing in comparison to regression models. So, I just chose “knnImpute” to cover missing data. I used <em>train</em> function once with the “knnImpute” and the other time without “knnImpute”. Because there was not a significant difference in the accuracy of the randomForest model on training data set, I preferred not to use “knnImpute” in order to decrease the amount of computations and time consumption.</p>
 
 <blockquote>
-<p>modFit&lt;-train(training$classe~.,data=training,method="rf",prox=TRUE)
-modFit
-modFit$finalModel</p>
+<p>modFit&lt;-train(training$classe~.,data=training,method="rf",prox=TRUE)</p>
+
+<p>modFit</p>
+
+<p>modFit$finalModel</p>
 </blockquote>
 
 <p>_Accuracy was 98.92%. Out-of-Bag (oob) error estimate was 0.74%.
@@ -149,6 +164,7 @@ summary(training)
 complete.cases(training)
 M&lt;-abs(cor(training[,-160]))
 nsv&lt;-nearZeroVar(training,saveMetrics=TRUE)
+nsv
 for (i in 1:160){
 x&lt;-nsv[i,4]
 if (x=="TRUE"){
